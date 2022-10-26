@@ -1,4 +1,4 @@
-rootProject.name = 'monolithic'
+rootProject.name = 'predictor'
 
 def includeModule(File path, String prefix = "") {
     include path.name

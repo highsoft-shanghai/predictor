@@ -1,4 +1,4 @@
-= Monolithic API文档
+= Predictor API文档
 highsoft.ltd
 :toc2: left
 :toclevels: 3
