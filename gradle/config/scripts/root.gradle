@@ -1,0 +1,117 @@
+apply from: "$rootDir/gradle/config/scripts/web.gradle"
+
+dependencies {
+    implementation project(":frameworks.domain.core")
+    implementation project(":frameworks.application.core")
+    implementation project(":frameworks.security.core")
+    implementation project(":frameworks.application.spring")
+    implementation libs.spring.boot.data.jpa
+    implementation libs.spring.boot.data.mongodb
+    implementation libs.spring.boot.quartz
+    implementation libs.migration.flyway
+    runtimeOnly libs.persistence.postgresql
+    testImplementation project(":frameworks.test.mongo")
+    testImplementation project(":frameworks.test.postgres")
+    testImplementation project(":frameworks.test.moco")
+    testImplementation project(":frameworks.test.web")
+    testImplementation libs.test.testcontainers.junit.jupiter
+}
+
+subprojects {
+    if (!(projectDir.parentFile in [rootProject.file("frameworks"), rootProject.file("modules")])) return
+    apply from: "$rootDir/gradle/config/scripts/library.gradle"
+
+    def injectDependencies = ProjectParser.parse(name).injectDependencies()
+    apply from: "$rootDir" + injectDependencies
+}
+
+subprojects {
+    if (!rootProject.hasProperty('chain-tests')) return
+    if (!tasks.findByName('test')) return
+    tasks.named('test') { test ->
+        rootProject.tasks.named('test') {
+            it.dependsOn(test)
+        }
+    }
+}
+
+apply from: "$rootDir/gradle/config/scripts/coverage-all.gradle"
+apply from: "$rootDir/coverage.gradle"
+
+
+class ProjectParser {
+    static Project parse(String name) {
+        if (isGateways(name)) return new GatewaysProject(name)
+        if (isApplication(name)) return new ApplicationProject(name)
+        if (isDomain(name)) return new DomainProject(name)
+        return new GeneralProject(name)
+    }
+
+    private static boolean isDomain(String name) {
+        name.endsWith(".domain")
+    }
+
+    private static boolean isApplication(String name) {
+        name.endsWith(".application")
+    }
+
+    private static boolean isGateways(String name) {
+        name.endsWith(".gateways")
+    }
+}
+
+interface Project {
+    String injectDependencies()
+}
+
+class DomainProject implements Project {
+
+    private final String name
+
+    DomainProject(String name) {
+        this.name = name
+    }
+
+    String injectDependencies() {
+        return "/gradle/config/scripts/domain.gradle"
+    }
+}
+
+class ApplicationProject implements Project {
+
+    private final String name
+
+    ApplicationProject(String name) {
+        this.name = name
+    }
+
+    String injectDependencies() {
+        return "/gradle/config/scripts/application.gradle"
+    }
+}
+
+class GatewaysProject implements Project {
+
+    private final String name
+
+    GatewaysProject(String name) {
+        this.name = name
+    }
+
+    String injectDependencies() {
+        return "/gradle/config/scripts/web.gradle"
+    }
+}
+
+class GeneralProject implements Project {
+
+    private final String name
+
+    GeneralProject(String name) {
+        this.name = name
+    }
+
+    String injectDependencies() {
+        return "/gradle/config/scripts/general.gradle"
+    }
+}

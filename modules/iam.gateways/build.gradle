@@ -1,0 +1,6 @@
+dependencies {
+    api project(":iam.application")
+    implementation project(":frameworks.persistence.mongo")
+    implementation libs.spring.boot.data.mongodb
+    testImplementation project(":frameworks.test.mongo")
+}

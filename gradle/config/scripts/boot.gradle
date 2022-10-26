@@ -1,0 +1,19 @@
+buildscript {
+    repositories {
+        maven {
+            url "${pluginRepositoryUrl}"
+        }
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.6.7")
+    }
+}
+
+apply from: "$rootDir/gradle/config/scripts/java.gradle"
+apply plugin: io.spring.gradle.dependencymanagement.DependencyManagementPlugin
+apply plugin: org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+dependencies {
+    annotationProcessor libs.spring.boot.configuration.processor
+}
