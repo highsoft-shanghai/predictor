@@ -18,3 +18,17 @@ jobs:
           java-version: '11'
       - name: Run integration tests
         run: sh ./scripts/check-all
+  build:
+    runs-on: ubuntu-latest
+      needs: check
+    steps:
+      - uses: actions/checkout@v2
+      - name: build
+        run: echo hello
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - name: deploy
+        run: echo hello
