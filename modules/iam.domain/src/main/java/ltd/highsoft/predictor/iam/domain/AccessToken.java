@@ -1,10 +1,12 @@
 package ltd.highsoft.predictor.iam.domain;
 
 import ltd.highsoft.frameworks.context.core.UserContext;
-import ltd.highsoft.frameworks.domain.core.ValueSink;
+import ltd.highsoft.frameworks.domain.core.*;
 import ltd.highsoft.frameworks.domain.core.archtype.Aggregate;
 import ltd.highsoft.frameworks.domain.core.fields.Id;
 import ltd.highsoft.frameworks.security.core.*;
+
+import static ltd.highsoft.frameworks.domain.core.MapBasedDescriptionFactory.createDescription;
 
 public final class AccessToken implements Context, Aggregate {
 
@@ -56,10 +58,12 @@ public final class AccessToken implements Context, Aggregate {
         return new SimpleSecurityContext(token(), grantedAuthorities);
     }
 
-    public void fullContent(ValueSink sink) {
-        sink.put("id", id());
-        owner.fullContent(sink);
-        grantedAuthorities.fullContent(sink);
+    public Description description() {
+        return createDescription(o -> {
+            o.put("id", id());
+            owner.createDescription(o);
+            grantedAuthorities.createDescription(o);
+        });
     }
 
     public void content(ValueSink sink) {
