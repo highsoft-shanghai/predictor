@@ -27,9 +27,29 @@ jobs:
           time=$(date "+%Y%m%d")
           docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
           docker build -t $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$time . && docker push $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$time
+  
+  
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check add and build docker image.
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_ADDRESS: ${{ secrets.DOCKER_ADDRESS }}
+          DOCKER_REPO_NAME_FE: ${{secrets.DOCKER_REPO_NAME_FE}}
+        run: |
+          cd ./frontends/management.webui
+          yarn install && yarn build
+          time=$(date "+%Y%m%d")
+          docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+          docker build -t $DOCKER_ADDRESS/$DOCKER_REPO_NAME_FE:$time . && docker push $DOCKER_ADDRESS/$DOCKER_REPO_NAME_FE:$time
+
+
   deploy:
     runs-on: ubuntu-latest
-    needs: build-backend
+    needs: [ build-backend, build-frontend ]
     steps:
       - uses: actions/checkout@v2
       - name: deploy
@@ -41,6 +61,7 @@ jobs:
           TARGET_MACHINE: ${{ secrets.TARGET_MACHINE }}
           DOCKER_REPO_NAME: ${{secrets.DOCKER_REPO_NAME }}
           DEMO_DB_URL: ${{secrets.DEMO_DB_URL }}
+          DOCKER_REPO_NAME_FE: ${{secrets.DOCKER_REPO_NAME_FE}}
         run: |
           sudo tee /home/id_rsa <<- EOF
           $DEPLOY_KEY
@@ -48,3 +69,7 @@ jobs:
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker rm -f predictor.backend||true"
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker pull $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker run --name predictor.backend -d -p 21000:8080 -e spring.profiles.active=demo -e spring.data.mongodb.uri=$DEMO_DB_URL --restart always $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
+          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker rm -f predictor.frontend||true"
+          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker pull $DOCKER_ADDRESS/$DOCKER_REPO_NAME_FE:$(date "+%Y%m%d")"
+          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker run --name predictor.frontend -d -p 21001:80 --restart always $DOCKER_ADDRESS/$DOCKER_REPO_NAME_FE:$(date "+%Y%m%d")"
+
