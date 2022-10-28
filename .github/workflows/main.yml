@@ -24,7 +24,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build
-        run: echo hello
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_ADDRESS: ${{ secrets.DOCKER_ADDRESS }}
+          DOCKER_REPO_NAME: ${{secrets.DOCKER_REPO_NAME}}
+        run: |
+          chmod +x ./gradlew && ./gradlew build --no-build-cache
+          time=$(date "+%Y%m%d")
+          docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+          docker build -t $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$time . && docker push $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$time
   deploy:
     runs-on: ubuntu-latest
     needs: build
