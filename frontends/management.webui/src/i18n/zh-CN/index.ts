@@ -1,5 +1,5 @@
 export default {
-  'app.title': '管理后台前端脚手架',
+  'app.title': 'Predictor',
   'message.back-home': '返回首页',
   'route.home': '首页',
   'route.workbench': '工作台',
