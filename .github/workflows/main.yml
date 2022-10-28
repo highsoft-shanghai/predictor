@@ -41,6 +41,7 @@ jobs:
           DOCKER_ADDRESS: ${{ secrets.DOCKER_ADDRESS }}
           DOCKER_REPO_NAME_FE: ${{secrets.DOCKER_REPO_NAME_FE}}
         run: |
+          ls
           yarn install && yarn build
           time=$(date "+%Y%m%d")
           docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
