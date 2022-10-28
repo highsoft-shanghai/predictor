@@ -69,11 +69,9 @@ jobs:
           $DEPLOY_KEY
           EOF
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker rm -f predictor.backend||true"
-          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker rmi $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker pull $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker run --name predictor.backend -d -p 21000:8080 -e spring.profiles.active=demo -e spring.data.mongodb.uri=$DEMO_DB_URL --restart always $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker rm -f predictor.frontend||true"
-          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker rmi $DOCKER_ADDRESS/$DOCKER_REPO_NAME_FE:$(date "+%Y%m%d")"
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker pull $DOCKER_ADDRESS/$DOCKER_REPO_NAME_FE:$(date "+%Y%m%d")"
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker run --name predictor.frontend -d -p 21001:80 --restart always $DOCKER_ADDRESS/$DOCKER_REPO_NAME_FE:$(date "+%Y%m%d")"
 
