@@ -46,6 +46,6 @@ jobs:
           sudo tee /home/id_rsa <<- EOF
           $DEPLOY_KEY
           EOF
-          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker rm -f neilwang.wiki"
+          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker rm -f predictor.backend"
           ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker pull $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
-          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker run --name neilwang.wiki -d -p 10080:80 --restart always $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
+          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker run --name predictor.backend -d -p 21000:8080 --restart always $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
