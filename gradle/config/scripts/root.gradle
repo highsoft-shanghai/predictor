@@ -8,7 +8,8 @@ dependencies {
     implementation libs.spring.boot.data.jpa
     implementation libs.spring.boot.data.mongodb
     implementation libs.spring.boot.quartz
-    implementation libs.migration.mongock.spring.boot
+    implementation libs.migration.mongock
+    implementation libs.migration.mongock.v5
     testImplementation project(":frameworks.test.mongo")
     testImplementation project(":frameworks.test.moco")
     testImplementation project(":frameworks.test.web")

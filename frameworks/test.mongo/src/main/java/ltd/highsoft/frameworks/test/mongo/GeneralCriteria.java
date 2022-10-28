@@ -1,14 +1,22 @@
 package ltd.highsoft.frameworks.test.mongo;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
+
+import static ltd.highsoft.frameworks.test.mongo.GeneralCriteria.FieldName.ID;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 public final class GeneralCriteria {
 
     private GeneralCriteria() {
     }
 
+    public static Criteria idIs(String id) {
+        return where(ID).is(id);
+    }
+
     public static Sort.Order descById() {
-        return Sort.Order.desc(FieldName.ID);
+        return Sort.Order.desc(ID);
     }
 
     public static Sort.Order descByCreatedAt() {

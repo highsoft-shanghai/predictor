@@ -1,3 +1,4 @@
 project.coverage.excludes = [
-    'ltd/highsoft/predictor/PredictorApplication.class'
+    'ltd/highsoft/predictor/PredictorApplication.class',
+    'db/migration'
 ]

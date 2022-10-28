@@ -9,7 +9,7 @@ general-commons-lang3 = "3.12.0"
 general-uuid-generator = "4.0.1"
 persistence-mongodb = "4.4.2"
 migration-flyway = "8.0.5"
-migration-mongock = "5.0.39"
+migration-mongock = "4.3.8"
 test-junit = "5.8.2"
 test-assertj = "3.21.0"
 test-mockito = "4.0.0"
@@ -37,7 +37,8 @@ general-commons-lang3 = { module = "org.apache.commons:commons-lang3", version.r
 general-uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.ref = "general-uuid-generator" }
 persistence-mongodb = { module = "org.mongodb:mongodb-driver-sync", version.ref = "persistence-mongodb" }
 migration-flyway = { module = "org.flywaydb:flyway-core", version.ref = "migration-flyway" }
-migration-mongock-spring-boot = { module = "io.mongock:mongock-springboot", version.ref = "migration-mongock" }
+migration-mongock = { module = "com.github.cloudyrock.mongock:mongodb-springdata-v2-driver", version.ref = "migration-mongock" }
+migration-mongock-v5 = { module = "com.github.cloudyrock.mongock:mongock-spring-v5", version.ref = "migration-mongock" }
 test-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "test-junit" }
 test-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "test-junit" }
 test-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "test-junit" }
