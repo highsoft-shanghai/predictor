@@ -54,7 +54,7 @@ jobs:
     needs: [ build-backend, build-frontend ]
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy to UAT.
+      - name: Deploy to UAT
         env:
           DEPLOY_KEY: ${{secrets.DEPLOY_KEY}}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
