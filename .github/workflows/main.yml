@@ -6,8 +6,9 @@ on:
     branches: [ master ]
   workflow_dispatch:
 jobs:
-  check:
+  build:
     runs-on: ubuntu-latest
+    needs: check
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -16,21 +17,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-      - name: Run integration tests
-        run: sh ./scripts/check-all
-  build:
-    runs-on: ubuntu-latest
-    needs: check
-    steps:
       - uses: actions/checkout@v2
-      - name: build
+      - name: Check add and build docker image.
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_ADDRESS: ${{ secrets.DOCKER_ADDRESS }}
           DOCKER_REPO_NAME: ${{secrets.DOCKER_REPO_NAME}}
         run: |
-          chmod +x ./gradlew && ./gradlew build --no-build-cache
+          chmod +x ./gradlew && ./gradlew clean build --no-build-cache
           time=$(date "+%Y%m%d")
           docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
           docker build -t $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$time . && docker push $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$time
@@ -40,4 +35,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: deploy
-        run: echo hello
+        env:
+          DEPLOY_KEY: ${{secrets.DEPLOY_KEY}}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_ADDRESS: ${{ secrets.DOCKER_ADDRESS }}
+          TARGET_MACHINE: ${{ secrets.TARGET_MACHINE }}
+          DOCKER_REPO_NAME: ${{secrets.DOCKER_REPO_NAME }}
+        run: |
+          sudo tee /home/id_rsa <<- EOF
+          $DEPLOY_KEY
+          EOF
+          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker rm -f neilwang.wiki"
+          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker pull $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
+          ssh -i /home/id_rsa $TARGET_MACHINE -o "StrictHostKeyChecking no" "docker run --name neilwang.wiki -d -p 10080:80 --restart always $DOCKER_ADDRESS/$DOCKER_REPO_NAME:$(date "+%Y%m%d")"
