@@ -9,9 +9,7 @@ dependencies {
     implementation libs.spring.boot.data.mongodb
     implementation libs.spring.boot.quartz
     implementation libs.migration.flyway
-    runtimeOnly libs.persistence.postgresql
     testImplementation project(":frameworks.test.mongo")
-    testImplementation project(":frameworks.test.postgres")
     testImplementation project(":frameworks.test.moco")
     testImplementation project(":frameworks.test.web")
     testImplementation libs.test.testcontainers.junit.jupiter

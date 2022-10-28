@@ -7,7 +7,6 @@ general-lombok = "1.18.24"
 general-guava = "31.1-jre"
 general-commons-lang3 = "3.12.0"
 general-uuid-generator = "4.0.1"
-persistence-postgresql = "42.3.4"
 persistence-mongodb = "4.4.2"
 migration-flyway = "8.0.5"
 migration-mongock = "5.0.39"
@@ -36,7 +35,6 @@ general-lombok = { module = "org.projectlombok:lombok", version.ref = "general-l
 general-guava = { module = "com.google.guava:guava", version.ref = "general-guava" }
 general-commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "general-commons-lang3" }
 general-uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.ref = "general-uuid-generator" }
-persistence-postgresql = { module = "org.postgresql:postgresql", version.ref = "persistence-postgresql" }
 persistence-mongodb = { module = "org.mongodb:mongodb-driver-sync", version.ref = "persistence-mongodb" }
 migration-flyway = { module = "org.flywaydb:flyway-core", version.ref = "migration-flyway" }
 migration-mongock-spring-boot = { module = "io.mongock:mongock-springboot", version.ref = "migration-mongock" }
@@ -51,6 +49,5 @@ test-mock = { module = "com.github.dreamhead:moco-core", version.ref = "test-moc
 test-spring-boot-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 test-testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "test-testcontainers" }
 test-testcontainers-mongodb = { module = "org.testcontainers:mongodb", version.ref = "test-testcontainers" }
-test-testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "test-testcontainers" }
 test-spring-restdocs-restassured = { module = "org.springframework.restdocs:spring-restdocs-restassured", version.ref = "spring-restdocs" }
 logging-logback = { module = "ch.qos.logback:logback-classic", version.ref = "logging-logback" }

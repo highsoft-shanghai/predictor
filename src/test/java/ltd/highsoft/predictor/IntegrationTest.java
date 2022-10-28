@@ -3,7 +3,6 @@ package ltd.highsoft.predictor;
 import ltd.highsoft.frameworks.test.container.WithTestContainers;
 import ltd.highsoft.frameworks.test.moco.MocoContainer;
 import ltd.highsoft.frameworks.test.mongo.MongoContainer;
-import ltd.highsoft.frameworks.test.postgres.PostgresContainer;
 import ltd.highsoft.frameworks.test.web.*;
 import ltd.highsoft.predictor.iam.domain.*;
 import org.junit.jupiter.api.*;
@@ -12,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.annotation.Resource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@WithTestContainers(containers = {PostgresContainer.class, MongoContainer.class, MocoContainer.class})
+@WithTestContainers(containers = {MongoContainer.class, MocoContainer.class})
 public abstract class IntegrationTest extends RestTest {
 
     private @Resource AccessTokens accessTokens;
