@@ -33,8 +33,10 @@ jobs:
   build-frontend:
     runs-on: ubuntu-latest
     steps:
-      - name: Check add and build docker image.
-#        working-directory: frontends/management.webui
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build frontend docker image.
+        #        working-directory: frontends/management.webui
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
