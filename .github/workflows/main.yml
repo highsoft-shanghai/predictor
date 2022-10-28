@@ -34,14 +34,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check add and build docker image.
-        working-directory: frontends/management.webui
+#        working-directory: frontends/management.webui
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_ADDRESS: ${{ secrets.DOCKER_ADDRESS }}
           DOCKER_REPO_NAME_FE: ${{secrets.DOCKER_REPO_NAME_FE}}
         run: |
-          ls
+          ls -la
           yarn install && yarn build
           time=$(date "+%Y%m%d")
           docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
