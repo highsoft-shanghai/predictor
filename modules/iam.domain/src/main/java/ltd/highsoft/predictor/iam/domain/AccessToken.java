@@ -2,7 +2,6 @@ package ltd.highsoft.predictor.iam.domain;
 
 import ltd.highsoft.frameworks.context.core.UserContext;
 import ltd.highsoft.frameworks.domain.core.*;
-import ltd.highsoft.frameworks.domain.core.archtype.Aggregate;
 import ltd.highsoft.frameworks.domain.core.fields.Id;
 import ltd.highsoft.frameworks.security.core.*;
 
