@@ -1,7 +1,6 @@
 package ltd.highsoft.frameworks.persistence.mongo;
 
 import ltd.highsoft.frameworks.domain.core.*;
-import ltd.highsoft.frameworks.domain.core.archtype.Aggregates;
 import ltd.highsoft.frameworks.persistence.spring.SpringPage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,7 +14,7 @@ import java.util.stream.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-public class MongoAggregates<Data, Aggregate> implements Aggregates<Aggregate> {
+public class MongoAggregates<Data, Aggregate> {
 
     private final MongoTemplate mongoTemplate;
     private final Class<Data> dataClass;
@@ -37,7 +36,6 @@ public class MongoAggregates<Data, Aggregate> implements Aggregates<Aggregate> {
         });
     }
 
-    @Override
     public Aggregate get(String id) {
         return asDomain.apply(ensureExistence(mongoTemplate.findById(id, dataClass), () -> id));
     }
@@ -46,7 +44,6 @@ public class MongoAggregates<Data, Aggregate> implements Aggregates<Aggregate> {
         return asDomain.apply(ensureExistence(mongoTemplate.findOne(query, dataClass), query::toString));
     }
 
-    @Override
     public Optional<Aggregate> getOptional(String id) {
         return Optional.ofNullable(mongoTemplate.findById(id, dataClass)).map(asDomain);
     }
@@ -55,28 +52,23 @@ public class MongoAggregates<Data, Aggregate> implements Aggregates<Aggregate> {
         return Optional.ofNullable(mongoTemplate.findOne(query, dataClass)).map(asDomain);
     }
 
-    @Override
     public void add(Aggregate aggregate) {
         verify.accept(aggregate);
         mongoTemplate.save(asData.apply(aggregate));
     }
 
-    @Override
     public void addAll(Collection<Aggregate> aggregates) {
         mongoTemplate.insertAll(aggregates.stream().peek(verify).map(asData).collect(Collectors.toList()));
     }
 
-    @Override
     public void remove(String id) {
         mongoTemplate.remove(query(where("id").is(id)), dataClass);
     }
 
-    @Override
     public void remove(Collection<String> ids) {
         mongoTemplate.remove(query(where("id").in(ids)), dataClass);
     }
 
-    @Override
     public void removeAll() {
         mongoTemplate.remove(new Query(), dataClass);
     }
@@ -85,7 +77,6 @@ public class MongoAggregates<Data, Aggregate> implements Aggregates<Aggregate> {
         mongoTemplate.remove(query, dataClass);
     }
 
-    @Override
     public List<Aggregate> list(Collection<String> ids) {
         return mongoTemplate.find(query(where("id").in(ids)), dataClass).parallelStream().map(asDomain).collect(Collectors.toList());
     }
